@@ -1,0 +1,100 @@
+name: egm
+version: 1
+description: Google Elephant-Goldfish Model (EGM) Spec-Driven Development - Adversarial goldfish review gauntlet before delta specs and tracked TDD execution.
+
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: Upstream problem statement and 6-lens shootdown brief
+    template: proposal.md
+    instruction: |
+      You are the Elephant Ideator. Conduct interactive problem exploration and 6-lens shootdown.
+      Follow these behavioral constraints:
+      - STRICTLY ONE QUESTION AT A TIME. Never bundle multiple questions in a single response.
+      - NO GLAZING OR SYCOPHANCY. Eliminate validating adjectives ('great', 'brilliant', 'smart') and polite apologies.
+      - Lead with what is wrong, missing, or risky before highlighting merits.
+      - Evaluate across 6 lenses: Contrarian/YAGNI, Cost/Token Economics, Developer Ergonomics, Migration/Backward Compatibility, Observability, and Long-Term Tech Debt.
+      - Formulate in-scope Goals, out-of-scope Non-Goals, and explicit Alternatives Weighed (attributing rejections to the author, not unattributed maintainers).
+      - Identify new or modified capability spec paths under `specs/<capability-path>/spec.md`.
+    requires: []
+
+  - id: specs
+    generates: "specs/**/*.md"
+    description: Normative SDD delta specifications for new or modified capabilities
+    template: spec.md
+    instruction: |
+      Create specification files that define WHAT the system should do.
+      A spec is a behavior contract, not an implementation plan.
+      - Create one spec file per capability listed in proposal.md at `specs/<capability-path>/spec.md`.
+      - For new capabilities, begin with `## Purpose` (at least 50 characters).
+      - Use `## ADDED Requirements`, `## MODIFIED Requirements`, `## REMOVED Requirements`, or `## RENAMED Requirements`.
+      - Every requirement must use `### Requirement: <Name>` with normative SHALL or MUST in the description body.
+      - Every scenario must use exactly four hashtags: `#### Scenario: <Name>` with `- **WHEN**` and `- **THEN**` steps.
+      - Under MODIFIED Requirements, never drop existing baseline scenarios without declaring them under REMOVED Requirements.
+    requires:
+      - proposal
+
+  - id: design
+    generates: design.md
+    description: Technical architecture with semantic boundary splitting and Heilmeier catechism
+    template: design.md
+    instruction: |
+      Create the technical design document explaining HOW to implement the change.
+      CRITICAL EXECUTION CONSTRAINTS:
+      - DESIGN-ONLY SCOPE: You are strictly forbidden from writing or modifying production code files in the source tree.
+      - SEMANTIC BOUNDARY: You MUST include the exact dividing header `## Detailed Implementation Plan`.
+        Content above this header is FeatureRange (architecture, data structures, trade-offs).
+        Content below this header is DetailedRange (target file allowlists, step-by-step logic, verification commands).
+      - THE ZERO-DECISION RULE: The Detailed Implementation Plan must leave zero technical choices to the implementer. All file paths, function signatures, error types, and dependencies must be explicitly chosen.
+      - THE HEILMEIER CATECHISM: Explicitly address the 8 Heilmeier questions in the Architecture & Context section.
+    requires:
+      - proposal
+
+  - id: review
+    generates: review.md
+    description: Stateless Goldfish review gauntlet and synthesis triage
+    template: review.md
+    instruction: |
+      Conduct the EGM Goldfish Review Gauntlet on proposal.md, specs/**/*.md, and design.md.
+      SUBAGENT DISPATCH CONSTRAINTS:
+      - Spawn review subagents in FRESH, ZERO-CONTEXT contexts (use harness isolation such as omitClaudeMd: true, fork_turns: 'none', or readonly subagents).
+      - Reviewers must not have access to previous chat history or unrecorded discussions.
+      - Reviewers operate under cold, adversarial standards: no praise, no apologies, evidence-grounded critiques with file:line references.
+      Execute the 5 review stages:
+      1. Stage 1 (Initial Zoom-Out): Simplicity, YAGNI, code reuse.
+      2. Stage 2 (Comprehension): Naive reader audit. Reviewer must first paraphrase the system in its own words.
+      3. Stage 3 (Design Critique): Scale, failure modes, concurrency, security, and edge cases.
+      4. Stage 4 (Intermediate Zoom-Out): Detect defensive bloat introduced during earlier review fixes.
+      5. Stage 5 (Implementation Readiness): Audit DetailedRange against the Zero-Decision Rule and Zero-Assumption Rule.
+      SYNTHESIS & RESOLUTION:
+      - Normalize and deduplicate findings into 🔴 Blocker, 🟡 Major, 🟢 Nit.
+      - Apply 4-way disposition: PROPOSE FIX, CONTEST, ESCALATE, DECLINE.
+      - Apply approved fixes directly to specs/**/*.md and design.md.
+      - Enforce convergence: Do not write final review.md until two consecutive clean rounds achieve zero Blockers and zero Majors.
+    requires:
+      - specs
+      - design
+
+  - id: tasks
+    generates: tasks.md
+    description: Tracked implementation checklist adhering to Zero-Decision standards
+    template: tasks.md
+    instruction: |
+      Create the implementation task list breaking down the work verified by review.md.
+      GUIDELINES:
+      - Group tasks under ## numbered headings.
+      - Every task must be a checkbox: `- [ ] X.Y Task description`.
+      - Every task MUST contain explicit verification criteria (a passing test, CLI command, or observable output).
+      - CO-LOCATE TESTS: Each task group must land its own unit tests and documentation. NEVER dump all tests into a final group.
+      - Confine tasks strictly to the Target Scope file allowlist established in design.md.
+    requires:
+      - review
+
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Execute the approved implementation plan strictly adhering to design.md and specs/**/*.md.
+    Work through tasks sequentially, check off completed items (- [x]), and maintain tests within each task group.
+    Do not touch files outside the Target Scope declared in design.md.
