@@ -12,7 +12,6 @@
   <a href="https://github.com/lutfi-zain/openspec-schema-egm/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square" alt="License"></a>
   <a href="https://github.com/Fission-AI/openspec"><img src="https://img.shields.io/badge/OpenSpec-≥1.7.0-purple.svg?style=flat-square" alt="OpenSpec Version"></a>
   <a href="https://github.com/google/elephant-goldfish-model"><img src="https://img.shields.io/badge/Google-EGM-amber.svg?style=flat-square" alt="Google EGM"></a>
-  <a href="https://www.npmjs.com/package/openspec-schema-egm"><img src="https://img.shields.io/badge/npx-openspec--schema--egm-black.svg?style=flat-square&logo=npm" alt="npm package"></a>
 </p>
 
 <br>
@@ -110,28 +109,26 @@ The Goldfish review stage in this schema caught both issues before any code was 
 
 ## Installation
 
-### Option 1: Via NPX (fastest)
-Run in your project root to copy the schema into `openspec/schemas/egm`:
+### Option 1: One-liner script (Recommended)
+Installs the schema globally for all projects on your machine:
 
-```bash
-npx openspec-schema-egm
-```
-
-Or install globally for all projects on your machine:
-```bash
-npx openspec-schema-egm -g
-```
-
-### Option 2: One-liner script
 ```bash
 curl -fsSL https://raw.githubusercontent.com/lutfi-zain/openspec-schema-egm/main/install.sh | bash
 ```
 
-### Option 3: Via degit
+*Installed to `~/.local/share/openspec/schemas/egm` (Linux/macOS) or `%LOCALAPPDATA%\openspec\schemas\egm` (Windows).*
+
+### Option 2: Project-level install via degit
+Installs the schema directly into your project's repository so your entire team shares it:
+
 ```bash
 npx degit lutfi-zain/openspec-schema-egm openspec/schemas/egm
 ```
 
+### Option 3: Manual git clone
+```bash
+git clone https://github.com/lutfi-zain/openspec-schema-egm.git openspec/schemas/egm
+```
 ---
 
 ## Quickstart and usage
