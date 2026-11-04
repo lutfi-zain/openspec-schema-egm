@@ -64,6 +64,6 @@
 
   <!-- Bottom Subtitle -->
   <text class="sub-text" x="360" y="108" text-anchor="middle">
-    Design with an Elephant &bull; Review with a Goldfish &bull; Compound with Living Specs
+    Design with an Elephant &#8226; Review with a Goldfish &#8226; Compound with Living Specs
   </text>
 </svg>
