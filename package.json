@@ -1,0 +1,43 @@
+{
+  "name": "openspec-schema-egm",
+  "version": "1.0.0",
+  "description": "Google Elephant-Goldfish Model (EGM) Spec-Driven Development Schema for OpenSpec",
+  "main": "bin/cli.js",
+  "bin": {
+    "openspec-schema-egm": "bin/cli.js",
+    "openspec-egm": "bin/cli.js"
+  },
+  "type": "module",
+  "files": [
+    "bin",
+    "templates",
+    "schema.yaml",
+    "install.sh",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node bin/cli.js --help"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lutfi-zain/openspec-schema-egm.git"
+  },
+  "keywords": [
+    "openspec",
+    "openspec-schema",
+    "spec-driven-development",
+    "sdd",
+    "egm",
+    "elephant-goldfish-model",
+    "google-egm",
+    "ai-agents",
+    "adversarial-review"
+  ],
+  "author": "Lutfi <lutfidmz@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/lutfi-zain/openspec-schema-egm/issues"
+  },
+  "homepage": "https://github.com/lutfi-zain/openspec-schema-egm#readme"
+}
