@@ -1,7 +1,7 @@
 # OpenSpec EGM Schema: Google Elephant-Goldfish Model for OpenSpec
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/google/elephant-goldfish-model/main/docs/assets/readme-header.svg" width="520" alt="Elephant-Goldfish Model on OpenSpec">
+  <a href="https://github.com/lutfi-zain/openspec-schema-egm"><img src="https://raw.githubusercontent.com/lutfi-zain/openspec-schema-egm/main/assets/readme-header.svg" width="680" alt="OpenSpec × Elephant-Goldfish Model"></a>
 </p>
 
 <p align="center">
