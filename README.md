@@ -1,41 +1,48 @@
-# OpenSpec EGM Schema: Google Elephant-Goldfish Model for OpenSpec
+# OpenSpec EGM schema: Google Elephant-Goldfish Model for OpenSpec
 
 <p align="center">
   <a href="https://github.com/lutfi-zain/openspec-schema-egm"><img src="assets/readme-header.svg" width="680" alt="OpenSpec × Elephant-Goldfish Model"></a>
 </p>
 
 <p align="center">
-  <strong>Design with an Elephant. Review with a Goldfish. Compound with OpenSpec.</strong>
+  Design with an Elephant. Review with a Goldfish. Compound with OpenSpec.
 </p>
 
 <p align="center">
   <a href="https://github.com/lutfi-zain/openspec-schema-egm/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square" alt="License"></a>
   <a href="https://github.com/Fission-AI/openspec"><img src="https://img.shields.io/badge/OpenSpec-≥1.7.0-purple.svg?style=flat-square" alt="OpenSpec Version"></a>
-  <a href="https://github.com/google/elephant-goldfish-model"><img src="https://img.shields.io/badge/Google-EGM--Standard-amber.svg?style=flat-square" alt="Google EGM"></a>
-  <a href="https://sdd.membran.app"><img src="https://img.shields.io/badge/Benchmark-Live--Verified-emerald.svg?style=flat-square" alt="Live Benchmark"></a>
+  <a href="https://github.com/google/elephant-goldfish-model"><img src="https://img.shields.io/badge/Google-EGM-amber.svg?style=flat-square" alt="Google EGM"></a>
+  <a href="https://www.npmjs.com/package/openspec-schema-egm"><img src="https://img.shields.io/badge/npx-openspec--schema--egm-black.svg?style=flat-square&logo=npm" alt="npm package"></a>
 </p>
 
 <br>
 
-**`openspec-schema-egm`** is a high-rigor, production-grade workflow schema for [OpenSpec](https://github.com/Fission-AI/openspec) that implements Google's [Elephant-Goldfish Model (EGM)](https://github.com/google/elephant-goldfish-model).
+`openspec-schema-egm` brings Google's [Elephant-Goldfish Model (EGM)](https://github.com/google/elephant-goldfish-model) into [OpenSpec](https://github.com/Fission-AI/openspec).
 
-It bridges the gap between **upstream epistemic rigor** (adversarial stress-testing by isolated zero-context reviewers) and **downstream compounding execution** (test-driven task checklists and atomic 3-way AST living specification merges).
-
----
-
-## The Problem: Why Standard SDD Still Fails
-
-Autonomous AI coding agents frequently fall into four failure modes:
-1. **Self-Review Confirmation Bias**: When the same agent session creates the proposal, writes the design, and reviews itself, it reflexively validates its own faulty assumptions instead of catching critical flaws.
-2. **Premature Implementation ("Weeds Syndrome")**: Agents jump immediately into writing code in nearby files before analyzing YAGNI (simplicity), existing library reuse, or database concurrency.
-3. **Chat Dump & Context Degradation**: Multi-page specifications dumped into chat degrade model reasoning across long sessions.
-4. **Documentation Drift**: Static design documents in `docs/designs/` rot as soon as the code evolves, leaving future agents with stale context.
+It pairs deep-context spec drafting with fresh-context adversarial reviewers to catch architectural blind spots before code gets written, then uses OpenSpec's 3-way AST merge to keep your living specifications in sync as you ship changes.
 
 ---
 
-## The Solution: Unified SDD Pipeline
+## Why this exists
 
-By combining Google EGM's cognitive asymmetry with OpenSpec's compounding specification engine, we establish a continuous, disciplined engineering pipeline:
+When an AI coding agent plans and implements a feature in the same conversation, it tends to rubber-stamp its own ideas. It creates a proposal, writes a design doc, and confirms everything looks great because it is grading its own homework. Sneaky issues like route collisions, database lock timeouts, or missing parameter validation slip right past into production code.
+
+Google's Elephant-Goldfish Model (EGM) tackled this on the design side:
+- The Elephant: An agent with full project context explores the problem and drafts the specification.
+- The Goldfish: Stateless subagent reviewers with zero conversation history evaluate the draft against strict rubrics without conversational bias.
+- The human engineer: Resolves trade-offs and approves the plan.
+
+EGM by itself stops at static Markdown files in `docs/designs/`. Once the feature is built, those documents begin rotting.
+
+OpenSpec solves the living maintenance side: it breaks changes into delta specs and task checklists, then uses an atomic 3-way AST merge (`specs-apply.ts`) to compound those deltas directly into your repository's living baseline specs (`openspec/specs/**`).
+
+This schema combines both. You get fresh-context review gauntlets before writing code, and automated living spec updates when you finish.
+
+---
+
+## How it works
+
+The workflow runs as a 5-node directed acyclic graph (DAG):
 
 ```mermaid
 graph TD
@@ -43,40 +50,36 @@ graph TD
     classDef goldfish fill:#d97706,stroke:#b45309,stroke-width:2px,color:#fff;
     classDef openspec fill:#7c3aed,stroke:#6d28d9,stroke-width:2px,color:#fff;
 
-    P[proposal.md<br/><b>The Elephant Ideator</b><br/>6-Lens Shootdown Brief]:::elephant --> S[specs/**/*.md<br/><b>Normative SDD Contract</b><br/>SHALL/MUST & Scenarios]:::openspec
-    P --> D[design.md<br/><b>Technical Architecture</b><br/>Heilmeier & Zero-Decision Split]:::elephant
-    S --> R[review.md<br/><b>The Goldfish Gauntlet</b><br/>5-Stage Stateless Swarm & Triage]:::goldfish
+    P[proposal.md<br/>The Elephant Ideator<br/>6-Lens Shootdown Brief]:::elephant --> S[specs/**/*.md<br/>Normative SDD Contract<br/>SHALL/MUST & Scenarios]:::openspec
+    P --> D[design.md<br/>Technical Architecture<br/>Heilmeier & Zero-Decision Split]:::elephant
+    S --> R[review.md<br/>The Goldfish Gauntlet<br/>5-Stage Stateless Swarm & Triage]:::goldfish
     D --> R
-    R --> T[tasks.md<br/><b>TDD Implementation Checklist</b><br/>Co-located Tests & File Allowlist]:::openspec
-    T --> AP[openspec apply<br/><b>Tracked Code Execution</b><br/>Zero Deviation from Design]:::openspec
-    AP --> AR[openspec archive<br/><b>3-Way AST Compounding</b><br/>Merge to Living Baseline Specs]:::openspec
+    R --> T[tasks.md<br/>TDD Implementation Checklist<br/>Co-located Tests & File Allowlist]:::openspec
+    T --> AP[openspec apply<br/>Tracked Code Execution<br/>Bounded by Design Allowlist]:::openspec
+    AP --> AR[openspec archive<br/>3-Way AST Compounding<br/>Merge into Living Specs]:::openspec
 ```
 
----
+### Stage breakdown
 
-## Head-to-Head Comparison
-
-| Dimension | Standard OpenSpec (`spec-driven`) | Standard Google EGM | OpenSpec EGM Schema (This Package) |
-| :--- | :--- | :--- | :--- |
-| **Upstream Ideation** | Unstructured freeform proposal | 6-lens shootdown (`concepts_brief.md`) | 🏆 **Structured 6-lens shootdown** (`proposal.md`) |
-| **Adversarial Peer Review** | ❌ None (Self-Review by same agent) | ✅ 5-stage zero-context subagent swarm | 🏆 **5-stage zero-context subagent swarm** (`review.md`) |
-| **Review Convergence Triage** | ❌ None | ✅ 4-way triage (`PROPOSE FIX`, `CONTEST`, etc.) | 🏆 **4-way triage + 2 clean rounds signoff** |
-| **Specification Standard** | Normative Delta Specs (SHALL/MUST) | Narrative design document | 🏆 **Normative Delta Specs + Heilmeier Catechism** |
-| **Implementation Plan** | Checkbox tasks (`tasks.md`) | Narrative steps in design doc | 🏆 **Checkbox tasks adhering to Zero-Decision Rule** |
-| **Living Spec Compounding** | ✅ 3-way AST merge (`specs-apply.ts`) | ❌ None (Static docs in `docs/designs/`) | 🏆 **3-way AST merge into `openspec/specs/**`** |
-| **Documentation Drift** | Zero drift | ⚠️ High risk (Manual drift reports) | 🏆 **Zero drift (Living truth guaranteed)** |
+| Artifact | Output target | Role and process |
+| :--- | :--- | :--- |
+| `proposal` | `proposal.md` | Elephant Ideation: Interactive problem exploration across 6 lenses (Contrarian/YAGNI, Cost & Token Economics, UX & Ergonomics, Migration & Compatibility, Observability, and Long-Term Tech Debt). Enforces one question at a time and zero flattery. |
+| `specs` | `specs/**/*.md` | Normative Contract (WHAT): Capability deltas (`ADDED`, `MODIFIED`, `REMOVED`, `RENAMED`) with SHALL/MUST requirements and WHEN/THEN scenarios. |
+| `design` | `design.md` | Technical Architecture (HOW): Answers the 8 Heilmeier questions and sets the semantic split header `## Detailed Implementation Plan` separating high-altitude design from code-level execution. Enforces a strict File Allowlist and the Zero-Decision Rule. |
+| `review` | `review.md` | The Goldfish Gauntlet: Dispatches isolated, zero-context reviewers across 5 stages (Initial Zoom-Out, Comprehension Paraphrase, Design Critique, Intermediate Zoom-Out, and Implementation Readiness). Triages findings with 4-way disposition (`PROPOSE FIX`, `CONTEST`, `ESCALATE`, `DECLINE`) and requires 2 clean rounds before tasks unlock. |
+| `tasks` | `tasks.md` | Implementation Tasks: Checkbox list (`- [ ]`) generated only after verified review approval. Requires co-located unit tests for each task group. |
 
 ---
 
-## The 5-Stage Goldfish Review Gauntlet
+## The 5-stage goldfish review gauntlet
 
-During the `review` phase, review subagents are spawned in **isolated, zero-context sessions** (`omitClaudeMd: true` / `fork_turns: 'none'`) with no conversation history. Reviewers operate under cold, adversarial standards:
+During the `review` phase, review subagents run in isolated, zero-context sessions (`omitClaudeMd: true` or `fork_turns: 'none'`) with no chat history. They evaluate the proposal, specs, and design against cold standards:
 
 ```text
 ├── Stage 1: Initial Zoom-Out Review
-│   └── Tests simplicity, YAGNI, and existing codebase/infrastructure reuse (zoom-out-standard).
+│   └── Tests simplicity, YAGNI, and existing codebase or library reuse.
 ├── Stage 2: Naive Reader Comprehension Test
-│   └── Mandatory 2-heading paraphrase ("What this system does" & "How this system works") before any critique.
+│   └── Mandatory 2-heading paraphrase ("What this system does" and "How this system works") before any critique.
 ├── Stage 3: Design Critique & System Failure Modes
 │   └── Evaluates scale, concurrency, SQLite WAL/lock modes, route collisions, and security.
 ├── Stage 4: Intermediate Zoom-Out Review
@@ -85,61 +88,61 @@ During the `review` phase, review subagents are spawned in **isolated, zero-cont
     └── Audits the Detailed Implementation Plan against the Zero-Decision Rule and strict File Allowlist.
 ```
 
-Findings are triaged into **🔴 Blocker**, **🟡 Major**, and **🟢 Nit**, with a mandatory **2-round clean pass (0 Blockers, 0 Majors)** before tasks can be generated.
+Findings are triaged into Blocker, Major, and Nit categories, with a mandatory signoff of zero Blockers and zero Majors before moving to tasks.
 
 ---
 
-## Empirical Benchmark Validation
+## Practical test results
 
-In an end-to-end live benchmark building a full-stack **Todo PWA (Svelte 5 + Tailwind + Hono + SQLite)** from identical prompts, this schema demonstrated superior defect detection:
+To see how this works in practice, we ran a side-by-side test building a full-stack Todo PWA (Svelte 5, Hono, SQLite) using three workflows with the exact same initial prompt:
 
-| Benchmark Metric | OpenSpec Standard | Google EGM Standard | OpenSpec EGM (This Schema) |
-| :--- | :---: | :---: | :---: |
-| **Automated Test Pass Rate** | 7/7 (100%) | 16/16 (100%) | 🏆 **17/17 (100%)** |
-| **Critical Defects Caught Pre-Code** | 0 (None) | 4 Blockers, 5 Majors | 🏆 **2 Blockers, 4 Majors** |
-| **Route Collision Prevention** | ❌ Missed | ✅ Caught & Fixed | 🏆 **Caught & Fixed (`/:id{\\d+}`)** |
-| **SQLite Concurrency Hardening** | ❌ Omitted `busy_timeout` | ✅ WAL + `busy_timeout` | 🏆 **WAL + `busy_timeout = 5000;`** |
-| **Priority Semantic Sort Flaw** | ❌ Alphabetical Sort | ✅ Custom SQL Mapping | 🏆 **SQL `CASE` Semantic Sort** |
-| **Living Baseline Compounding** | ✅ Compounded | ❌ Static File Only | 🏆 **Compounded into Living Specs** |
+| Workflow | Review method | Pre-code blockers caught | Automated tests passed | Living spec status |
+| :--- | :---: | :---: | :---: | :---: |
+| OpenSpec Standard | Self-Review (In-thread) | 0 (Missed) | 7/7 | Compounded |
+| Google EGM Standard | Goldfish Review | 4 Blockers, 5 Majors | 16/16 | Static Markdown |
+| OpenSpec EGM (This Schema) | True Zero-Context Goldfish | 2 Blockers, 4 Majors | 17/17 | Compounded via 3-way AST merge |
 
-*Live comparison dashboard running at [sdd.membran.app](https://sdd.membran.app).*
+Standard OpenSpec completed quickly, but its self-review completely missed a route collision between a batch delete endpoint and an ID parameter route, as well as SQLite lock timeouts under write load.
+
+The Goldfish review stage in this schema caught both issues before any code was written. It forced the agent to add regex parameter constraints (`/:id{\d+}`) and configure proper SQLite WAL pragmas with busy timeouts. Once approved, the changes were archived directly into living specs with 17 passing tests.
 
 ---
 
 ## Installation
 
-### Option 1: One-Liner Global Install (Recommended)
-Installs the schema globally for all projects on your machine:
+### Option 1: Via NPX (fastest)
+Run in your project root to copy the schema into `openspec/schemas/egm`:
 
+```bash
+npx openspec-schema-egm
+```
+
+Or install globally for all projects on your machine:
+```bash
+npx openspec-schema-egm -g
+```
+
+### Option 2: One-liner script
 ```bash
 curl -fsSL https://raw.githubusercontent.com/lutfi-zain/openspec-schema-egm/main/install.sh | bash
 ```
 
-*Installed to `~/.local/share/openspec/schemas/egm` (Linux/macOS) or `%LOCALAPPDATA%\openspec\schemas\egm` (Windows).*
-
-### Option 2: Project-Level Install via Degit
-Installs the schema directly into your project's repository so your entire team shares it:
-
+### Option 3: Via degit
 ```bash
 npx degit lutfi-zain/openspec-schema-egm openspec/schemas/egm
 ```
 
-### Option 3: Manual Clone
-```bash
-git clone https://github.com/lutfi-zain/openspec-schema-egm.git openspec/schemas/egm
-```
-
 ---
 
-## Quickstart & Usage
+## Quickstart and usage
 
-### 1. Start a New Change
+### 1. Start a new change
 ```bash
 openspec new change add-webhook-delivery --schema egm
 ```
 
-### 2. Follow the SDD Workflow
-OpenSpec automatically guides your AI coding agent through each unblocked stage:
+### 2. Follow the workflow
+OpenSpec guides your agent through each stage:
 
 ```bash
 # Phase 1: Upstream Elephant Ideation (6-lens shootdown brief)
@@ -154,7 +157,7 @@ openspec instructions design --change add-webhook-delivery
 # Phase 4: The 5-Stage Goldfish Review Gauntlet
 openspec instructions review --change add-webhook-delivery
 
-# Phase 5: Actionable TDD Tasks Checklist
+# Phase 5: Implementation Tasks Checklist
 openspec instructions tasks --change add-webhook-delivery
 
 # Phase 6: Code Implementation & Test Execution
@@ -166,9 +169,9 @@ openspec archive add-webhook-delivery --yes
 
 ---
 
-## Project Configuration (`openspec/config.yaml`)
+## Project configuration (`openspec/config.yaml`)
 
-To set `egm` as the default schema and configure project-level constraints:
+To make `egm` your project's default schema and set specific quality rules:
 
 ```yaml
 schema: egm
