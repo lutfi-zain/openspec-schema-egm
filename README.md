@@ -187,7 +187,7 @@ rules:
     - Always insert the exact dividing header '## Detailed Implementation Plan'.
     - Address all 8 Heilmeier questions in the architecture section.
   review:
-    - Spawn reviewer subagents in isolated zero-context contexts (omitClaudeMd: true, fork_turns: 'none').
+    - "Spawn reviewer subagents in isolated zero-context contexts (omitClaudeMd: true, fork_turns: 'none')."
     - Reviewers must strictly cite file:line references for every identified issue.
     - Reviewers must not offer praise; start directly with identified blockers and risks.
   tasks:
