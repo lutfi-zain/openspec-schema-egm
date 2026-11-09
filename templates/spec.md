@@ -1,4 +1,5 @@
 # Spec Delta: [Capability Name]
+<!-- CRITICAL: OpenSpec >= 1.16.1 strictly enforces the 4 canonical section headers below. Any non-standard header fails validation with a fatal error. -->
 
 ## Purpose
 

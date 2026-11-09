@@ -1,6 +1,6 @@
 {
   "name": "openspec-schema-egm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Google Elephant-Goldfish Model (EGM) Spec-Driven Development Schema for OpenSpec",
   "main": "bin/cli.js",
   "bin": {

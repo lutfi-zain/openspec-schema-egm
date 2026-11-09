@@ -12,7 +12,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **Stage 1** | Initial Zoom-Out | `egm-zoom-out` (`zoom-out-standard.md`) | [completed \| not run] | [N] |
 | **Stage 2** | Comprehension Test | `egm-comprehension` (Naive Reader Rubric) | [completed \| not run] | [N] |
-| **Stage 3** | Design Critique | `egm-design`, `egm-structural`, `egm-style` | [completed \| not run] | [N] |
+| **Stage 3** | Design Critique & TRIZ Catalyst | `egm-design`, `egm-inventive-catalyst`, `egm-structural`, `egm-style` | [completed \| not run] | [N] |
 | **Stage 4** | Intermediate Zoom-Out | `egm-zoom-out` (Anti-Defensive Bloat) | [completed \| not run] | [N] |
 | **Stage 5** | Implementation Readiness | `egm-implementation-readiness`, `codebase-details` | [completed \| not run] | [N] |
 

@@ -27,13 +27,12 @@ artifacts:
       A spec is a behavior contract, not an implementation plan.
       - Create one spec file per capability listed in proposal.md at `specs/<capability-path>/spec.md`.
       - For new capabilities, begin with `## Purpose` (at least 50 characters).
-      - Use `## ADDED Requirements`, `## MODIFIED Requirements`, `## REMOVED Requirements`, or `## RENAMED Requirements`.
+      - Use ONLY the 4 canonical delta sections: `## ADDED Requirements`, `## MODIFIED Requirements`, `## REMOVED Requirements`, or `## RENAMED Requirements`. (OpenSpec >= 1.16.1 rejects any unrecognized delta section as fatal error).
       - Every requirement must use `### Requirement: <Name>` with normative SHALL or MUST in the description body.
       - Every scenario must use exactly four hashtags: `#### Scenario: <Name>` with `- **WHEN**` and `- **THEN**` steps.
       - Under MODIFIED Requirements, never drop existing baseline scenarios without declaring them under REMOVED Requirements.
     requires:
       - proposal
-
   - id: design
     generates: design.md
     description: Technical architecture with semantic boundary splitting and Heilmeier catechism
@@ -63,7 +62,7 @@ artifacts:
       Execute the 5 review stages:
       1. Stage 1 (Initial Zoom-Out): Simplicity, YAGNI, code reuse.
       2. Stage 2 (Comprehension): Naive reader audit. Reviewer must first paraphrase the system in its own words.
-      3. Stage 3 (Design Critique): Scale, failure modes, concurrency, security, and edge cases.
+      3. Stage 3 (Design Critique & Inventive Catalyst): Scale, failure modes, concurrency, security, and TRIZ inventive contradiction resolution (eliminating false compromises).
       4. Stage 4 (Intermediate Zoom-Out): Detect defensive bloat introduced during earlier review fixes.
       5. Stage 5 (Implementation Readiness): Audit DetailedRange against the Zero-Decision Rule and Zero-Assumption Rule.
       SYNTHESIS & RESOLUTION:

@@ -11,8 +11,8 @@
 <p align="center">
   <a href="https://github.com/lutfi-zain/openspec-schema-egm/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square" alt="License"></a>
   <a href="https://www.npmjs.com/package/openspec-schema-egm"><img src="https://img.shields.io/npm/v/openspec-schema-egm.svg?style=flat-square&color=cb3837" alt="npm version"></a>
-  <a href="https://github.com/Fission-AI/openspec"><img src="https://img.shields.io/badge/OpenSpec-≥1.7.0-purple.svg?style=flat-square" alt="OpenSpec Version"></a>
-  <a href="https://github.com/google/elephant-goldfish-model"><img src="https://img.shields.io/badge/Google-EGM-amber.svg?style=flat-square" alt="Google EGM"></a>
+  <a href="https://github.com/Fission-AI/openspec"><img src="https://img.shields.io/badge/OpenSpec-≥1.16.1-purple.svg?style=flat-square" alt="OpenSpec Version"></a>
+  <a href="https://github.com/google/elephant-goldfish-model"><img src="https://img.shields.io/badge/Google-EGM--v0.1.1-amber.svg?style=flat-square" alt="Google EGM"></a>
 </p>
 
 <br>
@@ -80,8 +80,8 @@ During the `review` phase, review subagents run in isolated, zero-context sessio
 │   └── Tests simplicity, YAGNI, and existing codebase or library reuse.
 ├── Stage 2: Naive Reader Comprehension Test
 │   └── Mandatory 2-heading paraphrase ("What this system does" and "How this system works") before any critique.
-├── Stage 3: Design Critique & System Failure Modes
-│   └── Evaluates scale, concurrency, SQLite WAL/lock modes, route collisions, and security.
+├── Stage 3: Design Critique & TRIZ Inventive Catalyst
+│   └── Evaluates scale, failure modes, concurrency, security, and resolves architectural contradictions without compromise (TRIZ software patterns).
 ├── Stage 4: Intermediate Zoom-Out Review
 │   └── Audits documents for defensive bloat or over-engineering introduced during earlier fixes.
 └── Stage 5: Implementation Readiness Test
